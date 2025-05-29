@@ -256,15 +256,44 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('home').classList.add('active');
     navLinks[0].classList.add('active');
     
-    // Handle modal
-    const contactButton = document.getElementById('contact-button');
+    // Handle "Learn More" button to navigate to about section
+    const learnMoreButton = document.querySelector('.hero-actions .primary');
+    if (learnMoreButton) {
+        learnMoreButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Hide all sections
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show about section
+            document.getElementById('about').classList.add('active');
+            
+            // Update active nav link
+            navLinks.forEach(navLink => {
+                navLink.classList.remove('active');
+            });
+            
+            // Set the About nav link as active
+            const aboutNavLink = document.querySelector('a[href="#about"]');
+            if (aboutNavLink) {
+                aboutNavLink.classList.add('active');
+            }
+        });
+    }
+    
+    // Handle modal for all contact buttons
+    const contactButtons = document.querySelectorAll('#contact-button, #contact-button-hero');
     const closeModalButton = document.querySelector('.close-modal');
     const modal = document.querySelector('.modal');
     
-    if (contactButton && modal) {
-        contactButton.addEventListener('click', function() {
-            modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
+    if (contactButtons.length > 0 && modal) {
+        contactButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
         });
     }
     
@@ -280,6 +309,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.classList.remove('open');
                 document.body.style.overflow = 'auto';
             }
+        });
+    }
+    
+    // Handle close button in success message
+    const closeButton = document.querySelector('.close-button');
+    if (closeButton) {
+        closeButton.addEventListener('click', function() {
+            modal.classList.remove('open');
+            document.body.style.overflow = 'auto';
+            
+            // Reset form display after modal is closed
+            setTimeout(() => {
+                document.querySelector('.form-container').classList.remove('hidden');
+                document.querySelector('.success-message').classList.add('hidden');
+            }, 300);
         });
     }
 });
